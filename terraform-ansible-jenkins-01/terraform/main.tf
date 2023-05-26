@@ -1,7 +1,7 @@
 # Configure the AWS provider
 provider "aws" {
-  access_key = "AKIAXDAL3MFDECWSJE72"
-  secret_key = "Pbooua+3QKSSb2ttenuJHnuHww98d54w+iz5ByaU"
+  access_key = <YOUR AWS ACCESS KEY>
+  secret_key = <YOUR AWS SECRET>
   region     = "us-east-1" # Replace with your desired region
 }
 
@@ -15,23 +15,11 @@ resource "aws_key_pair" "jenkins_key_pair" {
 resource "aws_instance" "jenkins_instance" {
   ami           = "ami-053b0d53c279acc90" # Replace with your desired AMI
   instance_type = "t2.micro"              # Replace with your desired instance type
+
   # Configure the security group to allow incoming HTTP (port 8080) traffic
   vpc_security_group_ids = [aws_security_group.jenkins_security_group.id]
 
   key_name = aws_key_pair.jenkins_key_pair.key_name
-
-  # Specify user data to install Jenkins
-  # user_data = <<-EOF
-  #             #!/bin/bash
-  #             sudo apt-get update
-  #             sudo apt-get install -y openjdk-8-jdk
-  #             wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-  #             sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-  #             sudo apt-get update
-  #             sudo apt-get install -y jenkins
-  #             EOF
-
-
 
   tags = {
     Name = "JenkinsInstance"
