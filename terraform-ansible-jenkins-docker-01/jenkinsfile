@@ -1,0 +1,49 @@
+pipeline{
+    agent any
+    
+	environment {
+        //username-password type credentials setup in Jenkins with token as password
+		DOCKERHUB_CREDENTIALS=credentials('mydockerhub')
+	}
+
+	stages {
+
+		stage('Build') {
+
+			steps {
+			    sh 'whoami'
+			    sh 'pwd'
+			    sh 'docker ps'
+				sh 'docker build -t nikk007/apacheserver:latest .'
+			}
+		}
+
+		stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+		stage('Push') {
+
+			steps {
+				sh 'docker push nikk007/apacheserver:latest'
+			}
+		}
+		
+		stage('Deploy Docker Container') {
+
+			steps {
+				sh 'docker run -d -p 8082:80 nikk007/apacheserver:latest'
+			}
+		}
+	}
+
+	post {
+		always {
+			sh 'docker logout'
+		}
+	}
+
+}
