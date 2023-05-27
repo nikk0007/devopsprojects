@@ -1,0 +1,59 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ingress-gateway-configuration
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"   # Domain name of the external website
+---
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: myvs  # "just" a name for this virtualservice
+  namespace: default
+spec:
+  hosts:
+    - "*"  # The Service DNS (ie the regular K8S Service) name that we're applying routing rules to.
+  gateways:
+  - ingress-gateway-configuration
+  http:
+    - fault:
+        delay:
+           percentage:
+               value: 50 # delay for 50% of hits
+           fixedDelay: 5s    
+      # abort:
+      #    httpStatus: 500
+      #    percentage:
+      #        value: 10 #500 error 10% of the times
+      route:
+          - destination:
+              host: mydemoservice.default.svc.cluster.local # The Target DNS name
+              subset: one-group  # The name defined in the DestinationRule
+            weight: 10
+          - destination:
+              host: mydemoservice.default.svc.cluster.local # The Target DNS name
+              subset: two-group  # The name defined in the DestinationRule
+            weight: 90 
+---
+kind: DestinationRule       # Defining which pods should be part of each subset
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: grouping-rules # This can be anything you like.
+  namespace: default
+spec:
+  host: mydemoservice.default.svc.cluster.local # Service
+  subsets:
+    - labels:   # SELECTOR.
+        version: one # find pods with version label "one"
+      name: one-group
+    - labels:
+        version: two
+      name: two-group

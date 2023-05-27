@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: myapp
+        version: one
+    spec:
+      containers:
+      - name: app1
+        image: nikk007/app1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: myapp
+        version: two
+    spec:
+      containers:
+      - name: app2
+        image: nikk007/app2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydemoservice
+spec:
+  selector:
+    app: myapp
+  ports:
+    - name: http
+      port: 80
+      nodePort: 30080
+  type: NodePort
