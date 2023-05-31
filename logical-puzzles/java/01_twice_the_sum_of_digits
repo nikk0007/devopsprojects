@@ -1,0 +1,47 @@
+package com.test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Logic {
+
+	public static void main(String[] args) {
+		System.out.println("Hello Worldd");
+		
+		System.out.println(solution(19) + "");
+
+	}
+	
+	//given an integer N, returns the smallest integer greater than N,
+	//the sum of whose digits is twice as big as the sum of digits of N.
+	public static int solution(int num) {
+		int doubleSum = sumOfDigits(num) * 2;
+		
+		while(true) {
+			num = num + 1;
+			if(sumOfDigits(num) == doubleSum) {
+				break;
+			}
+		}
+		
+		return num;
+		
+	}
+	
+	//returns the sum of digits
+	public static int sumOfDigits(int num) {
+		List<Integer> digits = new ArrayList<>();
+		
+		while(num > 0) {
+			digits.add(num%10);
+			num = num/10;
+		}
+		
+		int sum=0;
+		for(int n : digits) {
+			sum = sum + n;
+		}
+		
+		return sum;
+	}
+}
