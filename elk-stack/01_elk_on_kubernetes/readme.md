@@ -2,6 +2,7 @@ I used local kubernetes cluster created using Docker Descktop.
 
 apply the corresponding manifests in this order:
 elasticsearch > can verify it on browser using http://localhost:31335
+
 logstash
 filebeat
 metricbeat
