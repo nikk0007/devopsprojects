@@ -6,13 +6,16 @@ data = {'Name': ['Alice', 'Bob', 'Charlie'],
         'City': ['New York', 'London', 'Paris']}
 df = pd.DataFrame(data)
 print(df)
-
+print("-----------------------------------------------------")
 # Accessing data in a DataFrame
 print(df['Name'])                 # Access a specific column
+print(".....................................................")
 print(df.loc[0])                  # Access a specific row using label-based indexing
+print("-----------------------------------------------------")
 print(df.iloc[1])                 # Access a specific row using integer-based indexing
+print(".....................................................")
 print(df.loc[0, 'Age'])            # Access a specific element using label-based indexing
-
+print("-----------------------------------------------------")
 # Writing data to a CSV file
 df.to_csv('data.csv', index=False)
 
