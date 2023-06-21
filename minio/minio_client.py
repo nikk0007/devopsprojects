@@ -3,8 +3,8 @@ from minio import Minio
 # Initialize the Minio client
 minio_client = Minio(
     "localhost:31074",
-    access_key="FVb2LAu4offnrC2oJ3t2",
-    secret_key="jYCXEhNhNPMsjMtbiuEvz2GomKRYSx0FeRjMtUSF",
+    access_key="<YOUR AWS ACCESS KEY>",
+    secret_key="<YOUR AWS SECRET KEY>",
     secure=False  # Set it to True if you're using HTTPS
 )
 
