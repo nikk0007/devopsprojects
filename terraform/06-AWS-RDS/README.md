@@ -7,9 +7,13 @@ terraform apply --auto-approve
 
 Goto MS Workbench and Click on the plus icon.:
 Connection Name: MyDatabseConnection
+
 Host Name: Enter the endpoint myrdsinstance.xoxoxoxoxo.us-east-1.rds.amazonaws.com
+
 Port: 3306
+
 Username: myrdsuser
+
 Password: Click on Store in Vault and enter password myrdspassword. Click on ok.
 
 Now click on Test Connection > OK
