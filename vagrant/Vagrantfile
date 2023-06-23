@@ -1,0 +1,30 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.define "t1" do |t1|
+    t1.vm.box = "ubuntu/bionic64"
+	t1.vm.network "private_network", ip: "192.168.40.11"
+	t1.vm.network "public_network"
+	t1.vm.provider "virtualbox" do |vb|
+     vb.memory = "512"
+	 vb.cpus = 1
+   end
+   t1.vm.provision "shell", inline: <<-SHELL
+     echo "hello t1"
+   SHELL
+  end
+
+   
+   config.vm.define "t3" do |t3|
+    t3.vm.box = "ubuntu/bionic64"
+    t3.vm.network "private_network", ip: "192.168.40.13"
+	t3.vm.network "public_network"
+	t3.vm.provider "virtualbox" do |vb|
+     vb.memory = "512"
+	 vb.cpus = 1
+   end
+   t3.vm.provision "shell", inline: <<-SHELL
+     echo "hello t3"
+   SHELL
+  end
+   
+end
