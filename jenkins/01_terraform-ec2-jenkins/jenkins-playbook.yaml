@@ -64,10 +64,10 @@
       ansible.builtin.command: 'sudo /usr/sbin/visudo -c'
       changed_when: false  
 
-  - name: Extract Jenkins initial admin password
-    command: "cat /var/lib/jenkins/secrets/initialAdminPassword"
-    register: admin_password
+    - name: Extract Jenkins initial admin password
+      command: "cat /var/lib/jenkins/secrets/initialAdminPassword"
+      register: admin_password
 
-  - name: Print Jenkins initial admin password
-    debug:
+    - name: Print Jenkins initial admin password
+      debug:
         var: admin_password.stdout_lines  
