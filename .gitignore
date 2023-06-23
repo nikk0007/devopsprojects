@@ -2,3 +2,4 @@
 mykey*
 .terraform*
 terraform.tfstate*
+.vscode
