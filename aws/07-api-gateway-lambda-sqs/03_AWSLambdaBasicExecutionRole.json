@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "sqs:SendMessage"
+                ],
+            "Resource": [
+                "arn:aws:logs:us-east-1:xoxoxoxoxoxo:*",
+                "arn:aws:sqs:us-east-1:xoxoxoxoxoxo:my_demo_queue"
+                ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:us-east-1:xoxoxoxoxoxo:log-group:/aws/lambda/lambda_sqs:*"
+            ]
+        }
+    ]
+}

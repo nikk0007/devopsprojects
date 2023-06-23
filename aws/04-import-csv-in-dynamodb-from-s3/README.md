@@ -14,3 +14,5 @@ Add Event Triggers to the S3 Bucket > Properties > Event Notifications
 select suffix as .csv and Destination as Lambda function.
 
 Now try to add another CSV file to S3 bucket. This will tigger an event and new data will also be added to dynamo db.
+
+We can delete the dynamoDB using Python script at the end.
