@@ -1,3 +1,0 @@
-- docker build -t nikk007/apachewebsite .
-- docker pull nikk007/apachewebsite
-- docker run -d -p 8082:80 nikk007/apachewebsite  ⇒ access website at port 8082

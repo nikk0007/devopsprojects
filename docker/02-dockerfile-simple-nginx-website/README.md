@@ -1,3 +1,0 @@
-- docker build -t nikk007/nginxwebsite .
-- docker pull nikk007/nginxwebsite
-- docker run -d -p 8082:80 nikk007/nginxwebsite  ⇒ access website at port 8082
