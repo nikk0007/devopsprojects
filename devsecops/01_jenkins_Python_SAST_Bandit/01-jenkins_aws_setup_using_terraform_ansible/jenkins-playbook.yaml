@@ -1,0 +1,73 @@
+---
+- name: Install Jenkins
+  hosts: server1
+  become: true
+
+  tasks:
+  - name: Update apt cache
+    apt:
+        update_cache: yes
+      
+  - name: ensure the jenkins apt repository key is installed
+    apt_key: url=https://pkg.jenkins.io/debian/jenkins.io-2023.key state=present
+    become: yes
+
+  - name: ensure the repository is configured
+    apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+    become: yes
+
+  - name: Update apt cache
+    apt:
+        update_cache: yes
+
+  - name: Install Java
+    apt:
+        name: default-jre
+        state: present
+    become: true
+
+  - name: Install jenkins
+    apt:
+      name: jenkins
+      state: present
+    become: true  
+
+  - name: daemon-reload to pick up config changes
+    ansible.builtin.systemd:
+      daemon_reload: yes
+
+  - name: Start jenkins
+    ansible.builtin.systemd:
+      name: jenkins
+      state: started
+
+  - name: Wait for Jenkins to start
+    wait_for:
+        host: localhost
+        port: 8080
+        delay: 10
+        timeout: 120
+    register: jenkins_started
+
+  - name: Add Jenkins user to sudoers file
+    ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        line: 'jenkins ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+        state: present
+        backup: yes
+    notify:
+        - Reload sudoers
+
+  handlers:
+    - name: Reload sudoers
+      ansible.builtin.command: 'sudo /usr/sbin/visudo -c'
+      changed_when: false  
+
+    - name: Extract Jenkins initial admin password
+      command: "cat /var/lib/jenkins/secrets/initialAdminPassword"
+      register: admin_password
+
+    - name: Print Jenkins initial admin password
+      debug:
+        var: admin_password.stdout_lines  

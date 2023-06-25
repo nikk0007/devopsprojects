@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Install Apache') {
+            steps {
+                sh 'sudo apt update'
+                sh 'sudo apt install -y apache2'
+            }
+        }
+        
+        stage('Configure Apache') {
+            steps {
+                sh 'sudo echo "<h1>Welcome to my Apache server!</h1>" | sudo tee /var/www/html/index.html'
+                sh 'sudo systemctl restart apache2'
+            }
+        }
+        
+        stage('Verify Apache') {
+            steps {
+                sh 'curl http://localhost'
+            }
+        }
+    }
+}

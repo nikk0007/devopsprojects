@@ -1,0 +1,26 @@
+---
+- name: Install Jenkins
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Update apt cache
+    apt:
+        update_cache: yes
+
+  - name: Update apt cache
+    apt:
+        update_cache: yes
+
+  - name: Install Java
+    apt:
+        name: default-jre
+        state: present
+    become: true
+
+  - name: Install Maven
+    apt:
+        name: maven
+        state: present
+
+  
