@@ -4,7 +4,7 @@ We will use OWASP Juice Shop application for testing:
 Code to test: Juiceshop:
 https://github.com/juice-shop/juice-shop.git
 
-Create an EC2 instance using terraform:
+create an EC2 instance using terraform:
 - terraform init
 - terraform validate
 - terraform fmt
@@ -19,7 +19,6 @@ Install Jenkins and docker on EC2 using Ansible playbook. It will also output th
 
 Install git,  github and pipeline plugins on Jenkins.
 _______________________________________________
-
 
 Create a pipeline job in Jenkins > use the jenkinsfile provided to run the pipeline.
 Check output for output of all the stages.

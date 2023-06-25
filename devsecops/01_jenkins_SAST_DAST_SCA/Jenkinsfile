@@ -1,0 +1,51 @@
+pipeline {
+	agent any
+	stages {
+		stage ("Git checkout"){
+			steps {
+				git branch: "master",
+					url: "https://github.com/juice-shop/juice-shop.git"
+				sh "echo 'Stage Git checkout'"
+				sh "ls"
+				sh "pwd"
+			}
+		}
+		stage ("SAST Stage"){
+			steps {
+
+			    sh "echo 'SAST Stage'"
+                sh "pwd"			        
+				sh "docker run --name sast -v /var/run/docker.sock:/var/run/docker.sock -v \$(pwd):/src horuszup/horusec-cli:v2.7 horusec start -p /src -P \$(pwd) || failure=true"
+				sh '''if [[ "\$(docker logs sast >& container-logs ; cat container-logs | grep 'Vulnerability MEDIUM is. [1-9]\\d*'  | wc -l)" -gt 0 ]]; then echo 'Failing job due to identified failures'; exit 1; else echo "no issues found"; exit 0; fi # If issues are found, fail job, if no issues are found pass job'''
+			}
+
+		}
+		stage ("SCA Stage"){
+			steps{
+
+			    sh "echo 'SCA Stage'"
+				sh "pwd"
+				sh "docker run --name sca --env SNYK_TOKEN -v \$(pwd):/app snyk/snyk:node || failure=true"
+				sh '''if [[ "\$(docker logs sca >& container-logs ; cat container-logs | grep 'found [1-9]\\d* issues' | wc -l)" -gt 0 ]]; then echo 'Failing job due to identified failures'; exit 1; else echo "no issues found"; exit 0; fi # If issues are found, fail job, if no issues are found pass job'''
+
+			}
+		}
+		stage ("DAST Stage"){
+			steps{
+			    sh "echo 'DAST Stage'"
+			    sh "pwd"
+				sh "docker run -d -p 3000:3000 --name juice-shop bkimminich/juice-shop  # Run juice-shop so we have something to test"
+				sh "sleep 30"
+				sh 'containerip=\$(docker inspect -f "{{ .NetworkSettings.Networks.bridge.IPAddress }}" juice-shop)   # Get container IP so we can test it'
+				sh "docker run -t --name dast owasp/zap2docker-stable zap-baseline.py -t http://\$containerip:3000 || failure=true  #run DAST testing against juice shop container"			
+				sh '''if [[ "\$(docker logs dast >& container-logs ; cat container-logs | grep 'WARN-NEW. [1-9]\\d*'  | wc -l)" -gt 0 ]]; then echo 'Failing job due to identified failures'; exit 1; else echo "no issues found"; exit 0; fi  # If issues are found, fail job, if no issues are found pass job'''
+			}
+		}
+		stage ("Deploy Stage"){
+			steps{
+			    sh "echo 'Deploy Stage'"
+			    sh "pwd"
+			}
+		}				
+	}
+}
