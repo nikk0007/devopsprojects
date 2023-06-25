@@ -1,4 +1,4 @@
-from app import home
+from simple-python-flask-app import home
 
 # Sample test case
 def test_home_page():
