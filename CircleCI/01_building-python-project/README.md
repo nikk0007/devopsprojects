@@ -1,0 +1,6 @@
+- goto this sample circleci python project: https://github.com/CircleCI-Public/sample-python-cfd
+- create a fork for this repo in your own github account
+- now go to https://circleci.com/ and login using github
+- go to application > setup a new project > select the repo which we just forked > select "main" branch
+- select the config file from the main branch of this repo
+- Now the build will start and complete successfully. No need to install anything on local machine.
