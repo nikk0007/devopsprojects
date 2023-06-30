@@ -1,0 +1,69 @@
+---
+- name: Install Nexus
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Transfer script to remote host
+    copy:
+      content: |
+        #!/bin/bash
+
+        echo "Installing Nexus..."
+        sudo yum install -y java-1.8.0-openjdk-devel
+        sudo yum install wget -y
+        sudo useradd -m -d /opt/nexus -s /bin/bash nexus
+        sudo chown -R nexus:nexus /opt/nexus
+
+        # Download Nexus, replace the URL with the latest version if necessary
+        NEXUS_VERSION="3.38.0-01"  # Update this version if needed
+        wget https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz
+        tar -xzf nexus-${NEXUS_VERSION}-unix.tar.gz
+        rm nexus-${NEXUS_VERSION}-unix.tar.gz
+
+        sudo mv nexus-${NEXUS_VERSION} /opt/nexus/
+
+        # Create Nexus service
+        sudo tee /etc/systemd/system/nexus.service << EOF
+        [Unit]
+        Description=nexus service
+        After=network.target
+
+        [Service]
+        Type=forking
+        LimitNOFILE=65536
+        User=nexus
+        Group=nexus
+        ExecStart=/opt/nexus/nexus-${NEXUS_VERSION}/bin/nexus start
+        ExecStop=/opt/nexus/nexus-${NEXUS_VERSION}/bin/nexus stop
+        User=nexus
+        Restart=on-abort
+
+        [Install]
+        WantedBy=multi-user.target
+        EOF
+
+        sudo systemctl enable nexus
+        sudo systemctl start nexus
+
+        echo "Nexus installed successfully."
+      dest: /tmp/nexus.sh
+      mode: 0755  
+
+  - name: Execute script on remote host
+    shell: /tmp/nexus.sh
+    register: script_output
+
+  - name: Display script output
+    debug:
+        var: script_output.stdout_lines
+
+
+
+
+
+
+
+
+
+

@@ -1,30 +1,49 @@
 # Configure the AWS provider
 provider "aws" {
-  access_key = "<YOUR AWS ACCESS KEY>"
-  secret_key = "<YOUR AWS SECRET KEY>"
-  region     = "us-east-1" # Replace with your desired region
+  region = "us-east-1" # Replace with your desired region
 }
 
 # Create a key pair for the EC2 instance
 resource "aws_key_pair" "my_ec2_key_pair" {
-  key_name   = "mykey"           # Replace with your desired key name
-  public_key = file("mykey.pub") # Replace with the path to your public key file
+  key_name   = "mykey"                   # Replace with your desired key name
+  public_key = file("../keys/mykey.pub") # Replace with the path to your public key file
 }
 
 # Create an EC2 instance
 resource "aws_instance" "my_ec2_instance" {
-  ami           = "ami-053b0d53c279acc90" # This is Ubuntu v22 AMI. Replace with your desired AMI
-  instance_type = "t2.micro"              # Replace with your desired instance type
+  ami           = "ami-0aedf6b1cb669b4c7" # This is Centos Linux AMI. Replace with your desired AMI
+  instance_type = "t2.medium"             # Replace with your desired instance type
 
   # Configure the security group to allow incoming HTTP (port 8080) traffic
   vpc_security_group_ids = [aws_security_group.my_ec2_security_group.id]
-
-  key_name = aws_key_pair.my_ec2_key_pair.key_name
+  key_name               = aws_key_pair.my_ec2_key_pair.key_name
 
   tags = {
     Name = "TestEC2Instance"
   }
   depends_on = [aws_security_group.my_ec2_security_group]
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir /tempp",
+      "echo Remote Exec Completed!",
+    ]
+
+    connection {
+      host        = aws_instance.my_ec2_instance.public_ip
+      type        = "ssh"
+      user        = "centos"
+      private_key = file("../keys/mykey")
+    }
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "Local Exec Started"
+      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u centos -i ${aws_instance.my_ec2_instance.public_ip}, --private-key ../keys/mykey -e 'pub_key=../keys/mykey.pub' ../ansible/nexus-playbook.yaml
+      EOT
+  }
+
 }
 
 # Create a security group allowing all inbound and outbound traffic
