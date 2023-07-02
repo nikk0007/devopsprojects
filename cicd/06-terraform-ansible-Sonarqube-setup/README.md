@@ -1,4 +1,4 @@
-This project is to create an EC2 using terraform and automatically trigger ansible to copy and execute the script on it to setup nexus repo.
+This project is to create an EC2 using terraform and automatically trigger ansible to copy and execute the script on it to setup sonarqube repo.
 
 Create a t2.medium EC2 with Centos.
 
@@ -8,7 +8,8 @@ Create a t2.medium EC2 with Centos.
 - terraform plan
 - terraform apply -auto-approve
 
-You can access nexus at port8081 using EC2 Public IP.
+You can access nexus at port 9000 using EC2 Public IP.
+Login using admin as username and password.
 
 Destroy the infra after use:
 - terraform destroy -auto-approve

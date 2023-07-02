@@ -11,6 +11,7 @@ Then install docker in both of them using the playbook in ansible folder: we are
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ubuntu -i <WORDPRESS EC2 PUBLIC IP>,<MYSQL EC2 PUBLIC IP>, --private-key ../keys/mykey -e 'pub_key=../keys/mykey.pub' docker-playbook.yaml
 
 You can visit here to check details of how to use Mysql container: https://hub.docker.com/_/mysql
+
 run mysql container in mysql EC2:
 - docker pull mysql:5.7
 - docker run -d \
@@ -35,7 +36,6 @@ To check mysql running container:
 - mysql -u root -p
 - then enter password supplied ealier
 # you can create a new database just for testing
-- SHOW DATABASES;
 - SHOW DATABASES;
 - CREATE DATABASE my_wp_db;
 - USE my_wp_db

@@ -1,7 +1,4 @@
-
-
-
-
+We will do the following using Terraform:
 
 Create a Provider for AWS.
 Create an AWS key pair.
