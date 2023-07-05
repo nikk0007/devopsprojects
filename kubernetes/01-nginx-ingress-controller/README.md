@@ -33,6 +33,8 @@ Then we will apply the ingress resource i.e ingress.yaml which has rules to send
 >localhost/myapp1path
 >localhost/myapp2path
 
+You can also check nginx-controller logs as you access the above urls:
+>k logs <ingress-nginx-controller-POD_NAME> -n ingress-nginx
 ==============================================================
 
 Here: nginx ingress Controller effectively reads the ingress rules from our kubernetes ingress resourse and updates its own configuration accordingly.
