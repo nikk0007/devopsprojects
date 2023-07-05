@@ -12,7 +12,7 @@ Deploy the Microservices:
 > k get svc
 
 Now we can test that we are able to access both of these services on browser using:
->localhost:<NodePort>
+localhost:<NodePort>
 ==========================================================
 Deploy Nginx Ingress Controller
 
