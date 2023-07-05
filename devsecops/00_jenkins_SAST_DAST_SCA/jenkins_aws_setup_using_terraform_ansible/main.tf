@@ -1,8 +1,6 @@
 # Configure the AWS provider
 provider "aws" {
-  access_key = "<YOUR AWS ACCESS KEY>"
-  secret_key = "<YOUR AWS SECRET>"
-  region     = "us-east-1"  # Replace with your desired region
+  region = "us-east-1" # Replace with your desired region
 }
 
 # Create a key pair for the EC2 instance
@@ -14,7 +12,7 @@ resource "aws_key_pair" "jenkins_key_pair" {
 # Create an EC2 instance
 resource "aws_instance" "jenkins_instance" {
   ami           = "ami-053b0d53c279acc90" # Replace with your desired AMI
-  instance_type = "t2.medium"              # Replace with your desired instance type
+  instance_type = "t2.medium"             # Replace with your desired instance type
 
   # Configure the security group to allow incoming HTTP (port 8080) traffic
   vpc_security_group_ids = [aws_security_group.jenkins_security_group.id]
@@ -22,7 +20,7 @@ resource "aws_instance" "jenkins_instance" {
   key_name = aws_key_pair.jenkins_key_pair.key_name
 
   tags = {
-    Name = "JenkinsInstance" 
+    Name = "JenkinsInstance"
   }
   depends_on = [aws_security_group.jenkins_security_group]
 }

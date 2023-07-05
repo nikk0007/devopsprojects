@@ -1,5 +1,4 @@
-
-
+Simple Jenkins pipeline using Jenkinsfile for a maven project from git repo.
 
 create EC2 instance using terraform:
 - terraform init
@@ -25,7 +24,7 @@ install git, maven integration plugins.
 In Jenkins dashboard:
 Manage Jenkins > System Configuration > tools > scroll down to find Maven section > uncheck auto install > add name and then add path as noted above)
 
-In job configuration under General Section tick Github project and provide your project url from Github- https://github.com/nikk0007/simple-java-app.git this will provide you link to GitHub from Job dashboard and it is optional
+In job configuration under General Section tick Github project and provide your project url from Github- https://github.com/nikk0007/simple-java-app.git.
 
 Under Source Code Management section click on Git radio button and provide Repository URL- https://github.com/nikk0007/simple-java-app.git
 select main branch.
@@ -37,7 +36,9 @@ Build Now > then check /var/lib/jenkins/workspace/<JOB NAME>/target/  for the ja
 Jenkinsfile can use the shell script with commands to be executed in the "Deliver" stage of the Pipeline. This script finds out the name and version of the final jar from the pom file and then executes the jar.
 Jar execution results in "Hello World!" printed on the screen.
 
+Link for Jenkinsfile: https://github.com/nikk0007/simple-java-app/blob/main/Jenkinsfile
 
+After the work is done, destroy infrastructure:
 - terraform destroy -auto-approve
 =================================================================
 

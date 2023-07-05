@@ -36,7 +36,8 @@ pipeline {
 			    sh "pwd"
 				sh "docker run -d -p 3000:3000 --name juice-shop bkimminich/juice-shop  # Run juice-shop so we have something to test"
 				sh "sleep 30"
-				sh 'containerip=\$(docker inspect -f "{{ .NetworkSettings.Networks.bridge.IPAddress }}" juice-shop)   # Get container IP so we can test it'
+				//sh 'containerip=\$(docker inspect -f "{{ .NetworkSettings.Networks.bridge.IPAddress }}" juice-shop)   # Get container IP so we can test it'
+				sh 'containerip=\$(docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" juice-shop)   # Get container IP so we can test it'
 				sh "docker run -t --name dast owasp/zap2docker-stable zap-baseline.py -t http://\$containerip:3000 || failure=true  #run DAST testing against juice shop container"			
 				sh '''if [[ "\$(docker logs dast >& container-logs ; cat container-logs | grep 'WARN-NEW. [1-9]\\d*'  | wc -l)" -gt 0 ]]; then echo 'Failing job due to identified failures'; exit 1; else echo "no issues found"; exit 0; fi  # If issues are found, fail job, if no issues are found pass job'''
 			}
@@ -48,4 +49,27 @@ pipeline {
 			}
 		}				
 	}
+
+	 post {
+        always {
+            // Cleanup steps or actions that should be performed regardless of the stage outcomes
+            
+            // For example, cleaning up temporary files
+            //sh 'rm -rf target'
+            echo 'ALWAYS'
+        }
+        
+        success {
+            // Actions to be performed only if the pipeline succeeds
+            
+            // For example, sending a notification
+            echo 'Pipeline succeeded! Sending notifications...'
+        }
+    failure {
+            // Actions to be performed only if the pipeline fails
+            
+            // For example, sending an email or Slack notification
+            echo 'Pipeline failed! Sending failure notifications...'
+        }
+    }
 }
