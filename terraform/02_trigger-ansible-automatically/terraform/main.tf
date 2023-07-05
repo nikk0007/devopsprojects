@@ -1,13 +1,11 @@
 # Configure the AWS provider
 provider "aws" {
-  access_key = "<YOUR AWS ACCESS KEY>"
-  secret_key = "<YOUR AWS SECRET KEY>"
-  region     = "us-east-1" # Replace with your desired region
+  region = "us-east-1" # Replace with your desired region
 }
 
 # Create a key pair for the EC2 instance
 resource "aws_key_pair" "my_ec2_key_pair" {
-  key_name   = "mykey"           # Replace with your desired key name
+  key_name   = "mykey"                   # Replace with your desired key name
   public_key = file("../keys/mykey.pub") # Replace with the path to your public key file
 }
 

@@ -1,5 +1,11 @@
 The "ps -aux" command is used to display information about active processes running on the system. When executed, it provides a tabular output with several columns. Here's an explanation of each column:
 
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0    916   536 ?        Sl   18:36   0:00 /init
+root         8  0.0  0.0   1264   364 ?        Ss   18:36   0:00 /init
+root         9  0.0  0.0   1272   364 ?        S    18:36   0:01 /init
+nikk        10  0.0  0.0   6164  5240 pts/0    Ss   18:36   0:00 -bash
+
 USER: This column displays the username or user ID of the process owner. It indicates the user account under which the process is running.
 
 PID: PID stands for Process ID. This column shows the unique identification number assigned to each process by the operating system.
