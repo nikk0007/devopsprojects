@@ -14,6 +14,7 @@ Deploy the Microservices:
 Now we can test that we are able to access both of these services on browser using:
 - localhost:<NodePort>
 ==========================================================
+
 Deploy Nginx Ingress Controller
 
 Create a namespace for the Ingress Controller: Open wsl2 ubuntu and run the following command:
