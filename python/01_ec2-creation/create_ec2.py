@@ -17,3 +17,4 @@ for instance in instances:
     print("Private IP:", instance.private_ip_address)
     print("Instance Type:", instance.instance_type)
     print("-----")
+

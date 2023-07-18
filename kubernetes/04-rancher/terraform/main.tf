@@ -15,6 +15,10 @@ resource "aws_instance" "ubuntu_instance" {
   ami           = "ami-053b0d53c279acc90" # Replace with your desired AMI
   instance_type = "t2.medium"             # Replace with your desired instance type
 
+  root_block_device {
+    volume_size = 30  # Custom volume size in GB
+  }
+  
   # Configure the security group to allow incoming HTTP (port 8080) traffic
   vpc_security_group_ids = [aws_security_group.my_security_group.id]
 
