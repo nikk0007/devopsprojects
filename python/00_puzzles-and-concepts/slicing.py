@@ -9,4 +9,4 @@ print("-------------------")
 print(my_list[::-1]) # Reversing the array using negative step value
 print(my_list[:-2:]) # from start till second last item
 print(my_list[-2::]) # returns last two elements
-print(my_list[-4:-2:1]) # reversed list of the fourth and third last elements
+print(my_list[-4:-2:1][::-1]) # reversed list of the fourth and third last elements

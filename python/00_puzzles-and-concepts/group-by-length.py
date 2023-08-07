@@ -13,4 +13,20 @@ def getGroup(myList):
     return myDictionary    
 
 
+# another way:
+def getGroup_2(myList):
+    myDictionary = {}
+    for item in  myList:
+        sizeKey = len(item)
+        if sizeKey not in myDictionary:
+            tempList = [item]
+            myDictionary[sizeKey] = tempList
+        else:
+            list = myDictionary[sizeKey]
+            list.append(item)
+            myDictionary[sizeKey] = list    
+
+    return myDictionary
+
+
 print(getGroup(words_list))

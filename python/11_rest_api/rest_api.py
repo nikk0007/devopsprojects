@@ -1,7 +1,7 @@
 import requests
 
 # GET request
-response = requests.get('https://api.example.com/users')
+response = requests.get('https://jsonplaceholder.typicode.com/todos/1')
 if response.status_code == 200:
     data = response.json()
     # Process the JSON data returned from the API
