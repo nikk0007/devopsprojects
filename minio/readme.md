@@ -1,4 +1,6 @@
-create a kuber netes cluster on either of the platform of your choice. Example:
+# We will be creating a minio DB and develop a client(in python) to access and manipulate the db.
+
+create a kubernetes cluster on either of the platform of your choice. Example:
 - Rancher desktop
 - Docker Desktop
 - AWS EKS etc
@@ -13,7 +15,7 @@ This will create a new namespace called minio-ns and will create a deployment an
 - k get pods -n minio-ns
 - k get svc -n minio-ns
 
-while checking service, note down the two nodePorts corresponding to mino pod ports 9090(31072 in my case) and 9000(31074 in my case).
+while checking service, note down the two nodePorts corresponding to minio pod ports 9090(31072 in my case) and 9000(31074 in my case).
 
 Use the NodePort corresponding to pod port 9090 to access Minio GUI on localhost:
 http://localhost:31072/
@@ -26,7 +28,7 @@ localhost:31074
 Install python minio module in case not present:
 - pip install minio
 
-Now we can use out minio client to access minio to create bucket, upload file, download file, list buckets etc.
+Now we can use our minio client to access minio to create bucket, upload file, download file, list buckets etc.
 
 We can also exec into the minio pod and check the "data" folder(which we had setup in minio.yaml)
 - k exec -it -n minio-dev minio-598b59589-vwp26 -- /bin/bash
