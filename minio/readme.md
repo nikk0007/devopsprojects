@@ -1,4 +1,4 @@
-create a kuber netes cluster on either of the platform of your choice. Example:a
+create a kuber netes cluster on either of the platform of your choice. Example:
 - Rancher desktop
 - Docker Desktop
 - AWS EKS etc
@@ -6,12 +6,12 @@ create a kuber netes cluster on either of the platform of your choice. Example:a
 I used Docker Desktop for this POC.
 
 Now apply minio.yaml using kubectl: (I have setup k as an alias for kubectl)
->k apply -f minio.yaml
+- k apply -f minio.yaml
 
 This will create a new namespace called minio-ns and will create a deployment and a NodePort service inside it:
->k get deploy -n minio-ns
->k get pods -n minio-ns
->k get svc -n minio-ns
+- k get deploy -n minio-ns
+- k get pods -n minio-ns
+- k get svc -n minio-ns
 
 while checking service, note down the two nodePorts corresponding to mino pod ports 9090(31072 in my case) and 9000(31074 in my case).
 
@@ -24,14 +24,14 @@ We will be using "localhost:31074" as API endpoint in our minio client written i
 localhost:31074
 
 Install python minio module in case not present:
->pip install minio
+- pip install minio
 
 Now we can use out minio client to access minio to create bucket, upload file, download file, list buckets etc.
 
 We can also exec into the minio pod and check the "data" folder(which we had setup in minio.yaml)
->k exec -it -n minio-dev minio-598b59589-vwp26 -- /bin/bash
->ls
->cd data
+- k exec -it -n minio-dev minio-598b59589-vwp26 -- /bin/bash
+- ls
+- cd data
 ls
 
 it will have all our buckets and corresponding objects within them
