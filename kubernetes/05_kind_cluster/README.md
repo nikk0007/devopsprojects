@@ -27,3 +27,7 @@ kubectl config use-context <Context>
 # to get cluster info
 kubectl cluster-info --context kind-cluster1
 --------------------------------------
+
+To access a service(on localhost:32270) deployed on kind cluster, use port forwarding:
+kubectl port-forward svc/example-service 32270:80
+=============================================

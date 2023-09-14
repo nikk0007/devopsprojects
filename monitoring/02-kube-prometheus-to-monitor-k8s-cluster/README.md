@@ -27,7 +27,7 @@ kubectl -n monitoring delete po <grafana-pod>
 # check Grafana dashboard(http://localhost:3000/) and login with default credentials(admin-admin). First do port forward:
 kubectl -n monitoring port-forward svc/grafana 3000
 
-# check prometheus console on localhost(http://localhost:9090/). Now we can check status > targets
+# check prometheus instance console on localhost(http://localhost:9090/). Now we can check status > targets
 kubectl -n monitoring port-forward svc/prometheus-operated 9090
 
 

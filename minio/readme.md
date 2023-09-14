@@ -1,7 +1,7 @@
 create a kuber netes cluster on either of the platform of your choice. Example:
->Rancher desktop
->Docker Desktop
->AWS EKS etc
+- Rancher desktop
+- Docker Desktop
+- AWS EKS etc
 
 I used Docker Desktop for this POC.
 
