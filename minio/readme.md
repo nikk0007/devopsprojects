@@ -1,4 +1,4 @@
-create a kuber netes cluster on either of the platform of your choice. Example:
+create a kuber netes cluster on either of the platform of your choice. Example:a
 - Rancher desktop
 - Docker Desktop
 - AWS EKS etc
