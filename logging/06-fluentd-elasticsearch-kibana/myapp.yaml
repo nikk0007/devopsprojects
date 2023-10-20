@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              wget -O - https://github.com/elastic/elk-index-size-tests/raw/master/logs.gz | gunzip > /var/log/myapp.log
+              tail -f /dev/null
+          volumeMounts:
+            - name: log-storage
+              mountPath: /var/log
+            - name: output-volume
+              mountPath: /tmp/shared
+          resources:
+            requests:
+              memory: "128Mi"   # Request 128 MiB of memory
+              cpu: "0.1"         # Request 100m (0.1 CPU)
+            limits:
+              memory: "256Mi"   # Limit memory usage to 256 MiB
+              cpu: "0.5" 
+      volumes:
+        - name: log-storage
+          hostPath:
+            path: /var/log
+        - name: output-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/nikk/temp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

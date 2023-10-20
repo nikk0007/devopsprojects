@@ -1,0 +1,10 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: my-python-app-monitor
+spec:
+  selector:
+    matchLabels:
+      app: my-python-app
+  endpoints:
+  - port: http  # This should match the port name in your Service YAML

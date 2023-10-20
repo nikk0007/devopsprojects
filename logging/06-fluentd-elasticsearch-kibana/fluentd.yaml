@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      serviceAccount: fluentd
+      containers:
+        - name: fluentd
+          image: fluent/fluentd:v1.12-debian
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "200m"
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /fluentd/etc
+            - name: shared
+              mountPath: /var/log
+            - name: output
+              mountPath: /tmp/fluent
+      volumes:
+        - name: config-volume
+          configMap:
+            name: fluentd-config
+        - name: shared
+          hostPath:
+             path: /var/log
+        - name: output
+          hostPath:
+             path: /run/desktop/mnt/host/c/nikk/temp

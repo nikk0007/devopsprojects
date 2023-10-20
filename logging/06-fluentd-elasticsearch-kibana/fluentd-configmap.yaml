@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      format apache
+      read_from_head true
+      path /var/log/myapp.log
+      pos_file /tmp/fluentd/app.log.pos
+      tag myapp.log
+    </source>
+    
+    <match myapp.log>
+      @type file
+      path /tmp/fluent/fluentd/myapp-output.log
+    </match>

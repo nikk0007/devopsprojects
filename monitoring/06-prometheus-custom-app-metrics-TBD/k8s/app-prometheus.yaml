@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: my-python-prometheus
+spec:
+  replicas: 1
+  serviceAccountName: myprometh-kube-prometheus-prometheus
+  scrapeInterval: 30s
+  serviceMonitorSelector:
+    matchLabels:
+      app: my-python-app
+  ruleSelector:
+    matchLabels:
+      release: myprometh
+  alerting:
+    alertmanagers:
+      - apiVersion: v2
+        name: myprometh-kube-prometheus-alertmanager
+        namespace: default
+        pathPrefix: /
+        port: http-web
+  securityContext:
+    fsGroup: 2000
+    runAsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault      
+  resources:
+    requests:
+      memory: "400Mi"
+      cpu: "100m"
+    limits:
+      memory: "800Mi"
+      cpu: "200m"

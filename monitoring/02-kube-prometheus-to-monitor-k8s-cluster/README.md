@@ -13,8 +13,13 @@ git clone --depth 1 https://github.com/prometheus-operator/kube-prometheus.git -
 
 # Deploy the setup directory first as it also has the namespace yaml.
 kubectl create -f ./manifests/setup/
+
+in case of any errors in CRDs, use force replace command in setup directory:
+kubectl replace -f . --force
+
 kubectl create -f ./manifests/
 kubectl get pods -n monitoring
+
 
 # now we can see that the prometheus operator pod will also be created. It will start looking at those CRDs.
 
@@ -29,6 +34,13 @@ kubectl -n monitoring port-forward svc/grafana 3000
 
 # check prometheus instance console on localhost(http://localhost:9090/). Now we can check status > targets
 kubectl -n monitoring port-forward svc/prometheus-operated 9090
+=================================================
 
+If still facing issues in node exporte pod, then use helm chart:
 
-
+helm fetch prometheus-community/kube-prometheus-stack --version 51.4.0
+tar -xvzf <helmFileDownloaded>
+cd into the extracted folder
+helm install my-prometheus .
+kubectl patch ds my-prometheus-prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
+=============================
