@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentbit
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: fluentbit
+  template:
+    metadata:
+      labels:
+        app: fluentbit
+    spec:
+      containers:
+      - name: fluentbit
+        image: fluent/fluent-bit:1.8
+        volumeMounts:
+        - name: config-volume
+          mountPath: /fluent-bit/etc/fluent-bit.conf
+          subPath: fluent-bit.conf
+        - name: shared
+          mountPath: /var/log  
+      volumes:
+      - name: config-volume
+        configMap:
+          name: fluent-bit-config
+      - name: shared
+        hostPath:
+             path: /var/log

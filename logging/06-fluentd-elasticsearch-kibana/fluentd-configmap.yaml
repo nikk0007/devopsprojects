@@ -6,7 +6,7 @@ data:
   fluent.conf: |
     <source>
       @type tail
-      format apache
+      format json
       read_from_head true
       path /var/log/myapp.log
       pos_file /tmp/fluentd/app.log.pos
@@ -16,4 +16,16 @@ data:
     <match myapp.log>
       @type file
       path /tmp/fluent/fluentd/myapp-output.log
+    </match>
+
+    <match app.log>
+      @type elasticsearch
+      host elasticsearch
+      port 9200
+      logstash_format true
+      logstash_prefix my-app-logs
+      include_tag_key true
+      type_name fluentd
+      tag_key @log_name
+      flush_interval 5s
     </match>

@@ -8,14 +8,12 @@ k exec -it myapp-6c977769b4-xglwj -- ls /var/log/
 To see top 10 lines of the log file from the container:
 k exec -it myapp-6c977769b4-7pmrc -- cat /var/log/myapp.log | head -n 10
 
-Our fluentd daemonset will fetch the logs of our custom app and then push them to some other desired file. For this we will be using file type match blocks. we can have multiple match blocks even for the same type if logs.
+Our fluentbit daemonset will fetch the logs of our custom app and then push them to elasticsearch.
 
-We will also send ALL logs to elasticsearch(after converting them to logstash format as configured in configmap) which in turn will send them to kibana for visualization.
-
-Fluentd volume paths are according to Docker-desktop. They can be modified as per requirement.
+Fluentbit volume paths are according to Docker-desktop. They can be modified as per requirement.
 =============================================================================
 
-to check all elasticsearch indexes manually to verify if it is working fine:(elasticsearch is exposed as a nodeport service on port 31349)
+to check all elasticsearch indexes manually to verify if it is working fine:(elasticsearch is exposed as a nodeport service on port 31349). It should show our "my_app_logs" index which we have configured in fluentbit config file.
 curl -X GET "http://localhost:31349/_cat/indices?v"
 
 To display an index with name my-app-logs:
@@ -23,3 +21,4 @@ curl -X GET "http://localhost:31349/my-app-logs/_search?pretty"
 ==============================================================================
 
 In kibana, we can create an index pattern to see the logs.
+===============================================================================

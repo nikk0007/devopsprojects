@@ -14,7 +14,7 @@ spec:
       serviceAccount: fluentd
       containers:
         - name: fluentd
-          image: fluent/fluentd:v1.12-debian
+          image: aimvector/fluentd-demo #fluent/fluentd:v1.12-debian
           resources:
             limits:
               memory: "500Mi"
