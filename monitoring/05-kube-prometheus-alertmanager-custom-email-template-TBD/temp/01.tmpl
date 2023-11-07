@@ -1,0 +1,23 @@
+{{ define "email.custom.text" }}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ .CommonAnnotations.summary }}</title>
+</head>
+<body>
+  <h1>"popopopopopopopo"</h1>
+  <h1>{{ .CommonLabels.alertname }}</h1>
+  <p>Severity: {{ .CommonLabels.severity }}</p>
+  <p>Start Time: {{ .CommonStartsAt }}</p>
+  <p>Labels:</p>
+  <ul>
+    {{ range $key, $value := .CommonLabels }}
+      {{ if ne $key "alertname" }}
+      <li>{{ $key }}: {{ $value }}</li>
+      {{ end }}
+    {{ end }}
+  </ul>
+  <p>Description: {{ .CommonAnnotations.description }}</p>
+</body>
+</html>
+{{ end }}

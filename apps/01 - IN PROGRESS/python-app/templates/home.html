@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <style>
+        .data-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hostname: {{ hostname }}</h1>
+
+    <div class="data-box">
+        <h2>Memcache Data:</h2>
+        <p>{{ memcache_data }}</p>
+    </div>
+
+    <form action="/check-memcache">
+        <button type="submit">Check Memcache</button>
+    </form>
+
+    <div class="data-box">
+        <h2>Database Data:</h2>
+        <table>
+            <tr>
+                <th>Employee Number</th>
+                <th>Name</th>
+                <th>Designation</th>
+            </tr>
+            {% for row in db_data %}
+            <tr>
+                <td>{{ row.emp_number }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.designation }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <form action="/fetch-data">
+        <button type="submit">Fetch Data from DB</button>
+    </form>
+</body>
+</html>

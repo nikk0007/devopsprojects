@@ -1,0 +1,181 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/default-container: prometheus-operator
+  creationTimestamp: "2023-09-18T09:58:14Z"
+  generateName: prometheus-operator-55cb8b56dc-
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: prometheus-operator
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.62.0
+    pod-template-hash: 55cb8b56dc
+  name: prometheus-operator-55cb8b56dc-nrjpf
+  namespace: monitoring
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: prometheus-operator-55cb8b56dc
+    uid: b14c4f8b-0bcb-43f0-8f76-25b9829b15c3
+  resourceVersion: "1482"
+  uid: fa04bd34-019b-454b-965b-551937e90593
+spec:
+  automountServiceAccountToken: true
+  containers:
+  - args:
+    - --kubelet-service=kube-system/kubelet
+    - --prometheus-config-reloader=quay.io/prometheus-operator/prometheus-config-reloader:v0.62.0
+    image: quay.io/prometheus-operator/prometheus-operator:v0.62.0
+    imagePullPolicy: IfNotPresent
+    name: prometheus-operator
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 200m
+        memory: 200Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-gjm2z
+      readOnly: true
+  - args:
+    - --logtostderr
+    - --secure-listen-address=:8443
+    - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+    - --upstream=http://127.0.0.1:8080/
+    image: quay.io/brancz/kube-rbac-proxy:v0.14.0
+    imagePullPolicy: IfNotPresent
+    name: kube-rbac-proxy
+    ports:
+    - containerPort: 8443
+      name: https
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 20m
+        memory: 40Mi
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+      runAsGroup: 65532
+      runAsNonRoot: true
+      runAsUser: 65532
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-gjm2z
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: cluster1-worker
+  nodeSelector:
+    kubernetes.io/os: linux
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+  serviceAccount: prometheus-operator
+  serviceAccountName: prometheus-operator
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-gjm2z
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-09-18T09:58:14Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-09-18T09:59:58Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-09-18T09:59:58Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-09-18T09:58:14Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://42d896ea4208fa977699411ffcef27b50f9836667cd7aef4afcebaaf8a01c654
+    image: quay.io/brancz/kube-rbac-proxy:v0.14.0
+    imageID: quay.io/brancz/kube-rbac-proxy@sha256:4ba7351a4d1efb50a03990697de7efbc51c6c02149f97b11f15d8f9953faf45e
+    lastState: {}
+    name: kube-rbac-proxy
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-09-18T09:59:57Z"
+  - containerID: containerd://d99fdd9f5af5f90aac4cfcc68bef4e7be93bbd75edd451e430c603326db25371
+    image: quay.io/prometheus-operator/prometheus-operator:v0.62.0
+    imageID: quay.io/prometheus-operator/prometheus-operator@sha256:46fa26e75d8cb62197ab5fd26d09790cf31c30d04d7a04fcc4f7da4bd3f1714d
+    lastState: {}
+    name: prometheus-operator
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-09-18T09:59:28Z"
+  hostIP: 172.18.0.2
+  phase: Running
+  podIP: 10.244.2.4
+  podIPs:
+  - ip: 10.244.2.4
+  qosClass: Burstable
+  startTime: "2023-09-18T09:58:14Z"

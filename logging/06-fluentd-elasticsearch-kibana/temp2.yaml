@@ -1,0 +1,260 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluentd
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluentd
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+      - "namespaces"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fluentd
+roleRef:
+  kind: ClusterRole
+  name: fluentd
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: fluentd
+    namespace: default
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      format json
+      read_from_head true
+      path /var/log/myapp.log
+      pos_file /tmp/fluentd/app.log.pos
+      tag myapp.log
+    </source>
+
+    <match **>
+      @type elasticsearch
+      host elasticsearch
+      port 9200
+      include_tag_key true
+      type_name fluentd
+      tag_key @log_name
+      logstash_format true
+      index_name my-app-logs
+    </match>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              i=0;
+              while(true); do
+                i=i+1;
+                echo "{\"log\":\"I1018 11:06:20.641209       1 handler.go:232] Adding GroupVersion authorization.k8s.io v1 to ResourceManager\n\",\"stream\":\"stderr\",\"time\":\"2023-10-18T11:06:20.641822642Z\"}" >> /var/log/myapp.log
+                sleep 1
+              done
+          volumeMounts:
+            - name: log-storage
+              mountPath: /var/log
+          resources:
+            requests:
+              memory: "128Mi"   # Request 128 MiB of memory
+              cpu: "0.1"         # Request 100m (0.1 CPU)
+            limits:
+              memory: "256Mi"   # Limit memory usage to 256 MiB
+              cpu: "0.5" 
+      volumes:
+        - name: log-storage
+          hostPath:
+            path: /var/log
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      serviceAccount: fluentd
+      containers:
+        - name: fluentd
+          image: aimvector/fluentd-demo #fluent/fluentd:v1.12-debian
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "200m"
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /fluentd/etc
+            - name: shared
+              mountPath: /var/log
+            - name: output
+              mountPath: /tmp/fluent
+      volumes:
+        - name: config-volume
+          configMap:
+            name: fluentd-config
+        - name: shared
+          hostPath:
+             path: /var/log
+        - name: output
+          hostPath:
+             path: /run/desktop/mnt/host/c/nikk/temp
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+spec:
+  selector:
+    matchLabels:
+      app: elasticsearch
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      initContainers:
+      - name: vm-max-fix
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        image: elasticsearch:7.9.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9200
+        env:
+        - name: node.name
+          value: "elasticsearch"
+        - name: cluster.initial_master_nodes
+          value: "elasticsearch"
+        - name: bootstrap.memory_lock
+          value: "false"
+        - name: ES_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+spec:
+  type: NodePort
+  selector:
+    app: elasticsearch
+  ports:
+    - protocol: TCP
+      name: http
+      port: 9200
+      targetPort: 9200
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  selector:
+    matchLabels:
+      app: kibana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: kibana:7.9.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5601
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch:9200"
+        - name: ELASTICSEARCH_HOSTS
+          value: "http://elasticsearch:9200"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  type: NodePort
+  selector:
+    app: kibana
+  ports:
+    - protocol: TCP
+      name: http
+      port: 5601
+      targetPort: 5601
+
+---
