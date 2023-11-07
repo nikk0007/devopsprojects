@@ -278,12 +278,12 @@ alertmanager:
     receivers:
     - name: 'null'
       email_configs:
-      - to: 'niketsingh.devops@gmail.com'
+      - to: 'niketsingh.devopsiuyiuoyuo@gmail.com'
         from: 'myprometh@gmail.com'
         smarthost: smtp.gmail.com:587
-        auth_username: 'niketsingh.devops@gmail.com'
-        auth_identity: 'niketsingh.devops@gmail.com'
-        auth_password: 'nxsyidymbsptxcmd'
+        auth_username: 'niketsingh.devopsiuyiuoyuo@gmail.com'
+        auth_identity: 'niketsingh.devopsiuyiuoyuo@gmail.com'
+        auth_password: 'nxsyidymbsptxcmdqwerty'
         send_resolved: true
         tls_config:
             insecure_skip_verify: true
