@@ -58,7 +58,7 @@ k exec -it alertmanager-myprometh-kube-prometheus-alertmanager-0 -- cat /etc/ale
 in case the changes are not applied in the pod, delete the pod:
 k delete pod alertmanager-myprometh-kube-prometheus-alertmanager-0
 
-In case ofany issue:
+In case of any issue:
 - try editing the original values.yaml file itself OR
 - try uninstalling and reinstalling helm chart
 - check altertmanager logs:
