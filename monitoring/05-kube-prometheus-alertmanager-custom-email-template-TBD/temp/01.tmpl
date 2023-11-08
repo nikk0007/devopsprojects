@@ -1,23 +1,14 @@
-{{ define "email.custom.text" }}
-<!DOCTYPE html>
-<html>
-<head>
-  <title>{{ .CommonAnnotations.summary }}</title>
-</head>
-<body>
-  <h1>"popopopopopopopo"</h1>
-  <h1>{{ .CommonLabels.alertname }}</h1>
-  <p>Severity: {{ .CommonLabels.severity }}</p>
-  <p>Start Time: {{ .CommonStartsAt }}</p>
-  <p>Labels:</p>
-  <ul>
-    {{ range $key, $value := .CommonLabels }}
-      {{ if ne $key "alertname" }}
-      <li>{{ $key }}: {{ $value }}</li>
+{{ define "emaildefaulthtml" }}
+      <h3>You have the following HTML alerts:</h3>
+      {{ range .Alerts }}
+      <p><b>{{.Labels.alertname}}</b>
+        <ul>{{ range .Annotations.SortedPairs }}
+        <li>{{ .Name }} = {{ .Value }}</li>
+        {{ end }}</ul>
+        <ul>{{ range .Labels.SortedPairs }}
+        <li>{{ .Name }} = {{ .Value }}</li>
+        {{ end }}</ul>
+        www.google.com
+        {{ .GeneratorURL }}</p>
       {{ end }}
-    {{ end }}
-  </ul>
-  <p>Description: {{ .CommonAnnotations.description }}</p>
-</body>
-</html>
-{{ end }}
+      {{ end }}

@@ -273,16 +273,16 @@ alertmanager:
       receiver: 'null'
       group_by: ['alertname', 'severity']
       group_wait: 30s
-      group_interval: 2m
-      repeat_interval: 5m
+      group_interval: 1m
+      repeat_interval: 2m
     receivers:
     - name: 'null'
       email_configs:
-      - to: 'niketsingh.devopsiuyiuoyuo@gmail.com'
+      - to: 'niketsingh.devopsqwerty@gmail.com'
         from: 'myprometh@gmail.com'
         smarthost: smtp.gmail.com:587
-        auth_username: 'niketsingh.devopsiuyiuoyuo@gmail.com'
-        auth_identity: 'niketsingh.devopsiuyiuoyuo@gmail.com'
+        auth_username: 'niketsingh.devopsqwerty@gmail.com'
+        auth_identity: 'niketsingh.devopsqwerty@gmail.com'
         auth_password: 'nxsyidymbsptxcmdqwerty'
         send_resolved: true
         tls_config:
@@ -326,18 +326,83 @@ alertmanager:
   templateFiles: 
     email.default.html.tmpl: |-
       {{ define "emaildefaulthtml" }}
-      <h3>You have the following HTML alerts:</h3>
-      {{ range .Alerts }}
-      <p><b>{{.Labels.alertname}}</b>
-        <ul>{{ range .Annotations.SortedPairs }}
-        <li>{{ .Name }} = {{ .Value }}</li>
-        {{ end }}</ul>
-        <ul>{{ range .Labels.SortedPairs }}
-        <li>{{ .Name }} = {{ .Value }}</li>
-        {{ end }}</ul>
-        {{ .GeneratorURL }}</p>
+      <html>
+      <head>
+        <style>
+          /* Add CSS styles here for improved email presentation */
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+          }
+          .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 20px auto;
+            padding: 20px;
+          }
+          .alert {
+            margin: 0;
+            padding: 0;
+          }
+          .alert-name {
+            font-size: 24px;
+            color: #333;
+          }
+          .timestamp {
+            font-size: 14px;
+            color: #777;
+          }
+          .summary {
+            font-size: 16px;
+            color: #333;
+          }
+          .labels {
+            font-size: 16px;
+            color: #333;
+            margin-left: 20px;
+          }
+          .annotations {
+            font-size: 16px;
+            color: #333;
+            margin-left: 20px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          {{ range .Alerts }}
+          <div class="alert">
+            <h1 class="alert-name">Alert Name: {{.Labels.alertname}}</h1>
+            <p class="timestamp"><b>Timestamp:</b> {{.StartsAt}}</p>
+            <p class="summary"><b>Summary:</b> {{.Annotations.summary}}</p>
+            <p class="labels"><b>Labels:</b></p>
+            <ul class="labels">
+              {{ range .Labels.SortedPairs }}
+              <li>{{ .Name }}: {{ .Value }}</li>
+              {{ end }}
+            </ul>
+            <p class="annotations"><b>Annotations:</b></p>
+            <ul class="annotations">
+              {{ range .Annotations.SortedPairs }}
+              <li>{{ .Name }}: {{ .Value }}</li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+        </div>
+      </body>
+      </html>
       {{ end }}
-      {{ end }}
+
+
+
+
 
     email.default.txt.tmpl: |-
       {{ define "emaildefaulttext" }}

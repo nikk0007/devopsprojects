@@ -1,0 +1,40 @@
+{{ define "emaildefaulthtml" }}
+        <html>
+        <head>
+          <style>
+            /* Add CSS styles here for improved email presentation */
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f0f0f0;
+            }
+            .alert {
+              background-color: #fff;
+              border: 1px solid #ccc;
+              margin: 10px;
+              padding: 10px;
+            }
+          </style>
+        </head>
+        <body>
+          {{ range .Alerts }}
+          <div class="alert">
+            <h1><p><b>AlertName: {{.Labels.alertname}}</b></p></h1>
+            <p><b>Timestamp:</b> {{.StartsAt}}</p>
+            <p><b>Summary:</b> {{.Annotations.summary}}</p>
+            <p><b>Labels:</b></p>
+            <ul>
+              {{ range .Labels.SortedPairs }}
+              <li>{{ .Name }}: {{ .Value }}</li>
+              {{ end }}
+            </ul>
+            <p><b>Annotations:</b></p>
+            <ul>
+              {{ range .Annotations.SortedPairs }}
+              <li>{{ .Name }}: {{ .Value }}</li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+        </body>
+        </html>
+        {{ end }}

@@ -1,0 +1,5 @@
+{{ define "emaildefaulthtml" }}
+      {{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}
+      =============================
+      {{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}
+      {{ end }}
