@@ -4,6 +4,10 @@ So, please setup gmail alerts using the previous project as a pre-requisite.
 aletmanager.config and alertmanager.templateFiles has been modified in values.yaml and we are able to receive the HTML emael template response on our gmail id.
 
 go in helm folder > helm install myprometh .
+
+the temp folder has various templates with increasing complexity from 1 to 5.
+this fodler also has the default prometheus email html template.
+we can use these templates and paste in values.yaml in alertmanager.templateFiles section.
 ===========================================================
 
 We can also modify the email receiver inline like below:
@@ -57,8 +61,3 @@ route:
     templates:
     - '/etc/alertmanager/config/*.tmpl'
 =============================================================
-
-the temp folder has various templates with increasing complexity from 1 to 5.
-this fodler also has the default prometheus email html template.
-we can use these templates and paste in values.yaml in alertmanager.templateFiles section.
-=================================================================
