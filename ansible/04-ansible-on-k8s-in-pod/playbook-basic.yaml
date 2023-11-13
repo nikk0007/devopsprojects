@@ -1,0 +1,7 @@
+---
+- name: Hello World Playbook
+  hosts: localhost  # Replace with your actual host or group name
+
+  tasks:
+    - name: Print Hello World
+      command: echo "Hello, world!"

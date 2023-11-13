@@ -1,0 +1,10 @@
+---
+- name: Execute Bash Command
+  hosts: localhost  # Define the target hosts here, like 'localhost' for local execution or a group from your inventory file
+  tasks:
+    - name: Execute Command
+      command: "hostname"  # Replace 'hostname' with the command you want to execute
+      register: command_output  # Capture the command output
+
+    - debug:
+        var: command_output.stdout  # Display the output of the command

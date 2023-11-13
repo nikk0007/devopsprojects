@@ -1,0 +1,14 @@
+{{ define "emaildefaulthtml" }}
+      <h3>You have the following HTML alerts:</h3>
+      {{ range .Alerts }}
+      <p><b>{{.Labels.alertname}}</b>
+        <ul>{{ range .Annotations.SortedPairs }}
+        <li>{{ .Name }} = {{ .Value }}</li>
+        {{ end }}</ul>
+        <ul>{{ range .Labels.SortedPairs }}
+        <li>{{ .Name }} = {{ .Value }}</li>
+        {{ end }}</ul>
+        www.google.com
+        {{ .GeneratorURL }}</p>
+      {{ end }}
+      {{ end }}

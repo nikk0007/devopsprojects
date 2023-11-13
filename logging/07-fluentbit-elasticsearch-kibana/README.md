@@ -18,7 +18,9 @@ curl -X GET "http://localhost:31349/_cat/indices?v"
 
 To display an index with name my-app-logs:
 curl -X GET "http://localhost:31349/my-app-logs/_search?pretty"
+
 ==============================================================================
 
 In kibana, we can create an index pattern to see the logs.
+
 ===============================================================================

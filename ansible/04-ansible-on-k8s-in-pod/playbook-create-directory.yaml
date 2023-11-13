@@ -1,0 +1,11 @@
+---
+- name: Create a Directory
+  hosts: localhost  # Replace with your target host or group from your inventory
+  become: true  # To escalate privileges if required
+
+  tasks:
+    - name: Ensure the directory exists
+      file:
+        path: /home/nikk/poi/  # Replace with the directory path
+        state: directory
+        mode: 0755  # Set permissions as needed
