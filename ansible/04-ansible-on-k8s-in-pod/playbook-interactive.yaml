@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Display Inventory Servers
+      debug:
+        msg: "Available servers: {{ groups['all'] }}"
+
+    - name: Prompt to Choose a Server
+      pause:
+        prompt: "Choose a server from the list above (e.g., server1):"
+      register: chosen_server
+
+    - name: Display Chosen Server
+      debug:
+        msg: "You selected: {{ chosen_server.user_input }}"
+
+    - name: Execute ls on Chosen Server
+      command: "ls"
+      delegate_to: "{{ chosen_server.user_input }}"
