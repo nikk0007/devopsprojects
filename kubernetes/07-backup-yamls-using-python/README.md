@@ -1,0 +1,1 @@
+to backup YAMLs of all the kubernetes resources in a particular namespace.
