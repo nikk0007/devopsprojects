@@ -20,6 +20,11 @@ while checking service, note down the two nodePorts corresponding to minio pod p
 Use the NodePort corresponding to pod port 9090 to access Minio GUI on localhost:
 http://localhost:31072/
 
+
+Default username and password:
+minioadmin
+minioadmin
+
 Generate access-key and secret-key using this GUI in browser and use them in minio_client.py to access the hosted minio.
 
 We will be using "localhost:31074" as API endpoint in our minio client written in python code(note that I have used the NodePort corresponding to API port i.e 9000):
