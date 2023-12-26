@@ -2,11 +2,12 @@
     ServerName myapp2.example.com
     DocumentRoot /var/www/html
 
-    Alias "/test" "/var/www/html/test"
-
-    <Directory "/var/www/html/test">
+    <Directory "/var/www/html">
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
+
+    RewriteEngine On
+    RewriteRule ^/test$ / [L,R=301]
 </VirtualHost>
