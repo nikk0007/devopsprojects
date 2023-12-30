@@ -1,16 +1,31 @@
 import requests
 import time
+from datetime import datetime, timezone
+
+def get_local_time():
+    return time.strftime('%Y-%m-%d %H:%M:%S')
+
+def get_utc_time():
+    utc_time = datetime.utcnow()
+    return utc_time.strftime('%Y-%m-%d %H:%M:%S UTC')
 
 def check_app_status(url):
     try:
         response = requests.get(url)
-        # Check if the response status code is 2xx (indicating success)
-        if response.status_code // 100 == 2:
-            print(f"App is up and running - Status Code: {response.status_code}")
-        else:
-            print(f"App is down - Status Code: {response.status_code}")
+        local_timestamp = get_local_time()
+        utc_timestamp = get_utc_time()
+
+        with open('app_status_log.txt', 'a') as log_file:
+            if response.status_code // 100 == 2:
+                log_file.write(f"{local_timestamp} / {utc_timestamp} - App is up and running - Status Code: {response.status_code}\n")
+            else:
+                log_file.write(f"{local_timestamp} / {utc_timestamp} - App is down - Status Code: {response.status_code}\n")
+
     except requests.RequestException as e:
-        print(f"Error connecting to the app: {e}")
+        local_timestamp = get_local_time()
+        utc_timestamp = get_utc_time()
+        with open('app_status_log.txt', 'a') as log_file:
+            log_file.write(f"{local_timestamp} / {utc_timestamp} - Error connecting to the app: {e}\n")
 
 if __name__ == "__main__":
     # Replace 'http://xyz.com' with your actual app URL
