@@ -75,6 +75,9 @@ def create_excel_sheet(permissions):
     wb.save('kubernetes_permissions.xlsx')
 
 def main():
+    # Load the Kubernetes configuration from the kubeconfig file
+    #config.load_kube_config(config_file="/path/to/your/kubeconfig")
+
     config.load_kube_config()
     v1 = client.RbacAuthorizationV1Api()
 
