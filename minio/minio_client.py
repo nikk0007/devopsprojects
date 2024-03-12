@@ -2,9 +2,9 @@ from minio import Minio
 
 # Initialize the Minio client
 minio_client = Minio(
-    "localhost:31074",
-    access_key="<YOUR ACCESS KEY>",
-    secret_key="<YOUR SECRET KEY>",
+    "localhost:30175",
+    access_key="Pwra1yR7RTIfFh1Rwy9e",
+    secret_key="C86gzNUrpt2tDSVlmfPt55CfPmnVxLYHnAOgyywg",
     secure=False  # Set it to True if you're using HTTPS
 )
 
@@ -34,7 +34,7 @@ def list_objects(bucket_name):
 
 # Example usage
 if __name__ == "__main__":
-    bucket_name = "my-bucket"
+    bucket_name = "my-bucket-via-python"
     object_name = "my-object"
     file_path = "sample-file.txt"
 

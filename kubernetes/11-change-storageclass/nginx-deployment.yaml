@@ -1,0 +1,47 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-volume
+          mountPath: /usr/share/nginx/html
+        # - name: nginx-volume2
+        #   mountPath: /tmp/new
+      volumes:
+        - name: nginx-volume
+          persistentVolumeClaim:
+            claimName: pvc1
+        # - name: nginx-volume2
+        #   persistentVolumeClaim:
+        #     claimName: pvc2  
+---
+# nginx-nodeport-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-nodeport-service
+spec:
+  selector:
+    app: nginx
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080  # You can specify any available port you want to use as NodePort

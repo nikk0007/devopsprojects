@@ -1,0 +1,13 @@
+# nginx-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: sc2
+  # storageClassName: local-storage
+  resources:
+    requests:
+      storage: 2Gi
