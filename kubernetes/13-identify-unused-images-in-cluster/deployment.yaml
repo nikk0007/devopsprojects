@@ -1,0 +1,22 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pt
+  template:
+    metadata:
+      labels:
+        app: pt
+    spec:
+      serviceAccountName: my-service-account
+      containers:
+      - name: pt
+        image: python:latest
+        ports:
+        - containerPort: 80
+        command: ["sleep", "18000"]  # 5 hours in seconds
