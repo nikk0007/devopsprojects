@@ -57,6 +57,9 @@ velero backup describe myfirstbackup --details
 velero backup logs myfirstbackup
 velero get backups
 velero delete backup myfirstbackup
+==========================================================================
+
+To restore from a velero backup:
 
 
 

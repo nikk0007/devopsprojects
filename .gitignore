@@ -3,3 +3,63 @@ mykey*
 .terraform*
 terraform.tfstate*
 .vscode
+
+# Eclipse
+*.pydevproject
+.project
+.metadata
+bin/
+tmp/
+tmp2/
+*.tmp
+*.bak
+*.swp
+*~
+
+# External tool builders
+.externalToolBuilders/
+
+# JDT-specific
+*.class
+*.jar
+
+# Maven
+target/
+
+# Gradle
+bin/
+build/
+.gradle/
+
+# IntelliJ IDEA
+.idea/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfplan
+
+# Kubernetes
+*.log
+*.yaml
+
+# Ansible
+*.retry
+*.pid
+*.log
+
+# Docker
+.dockerignore
+Dockerfile.*
+docker-compose.yml
+
+# AWS
+.aws-sam/
+.aws/
